@@ -2,24 +2,24 @@
 An Android version of my Build a PC Sales Deal Hunter email service
 
 Add queries with multiple tags and corresponding prices.
-![alt tag](https://goo.gl/photos/pquQR4KCmNZXjWuv5)
+![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-02-29-19-37-49.png)
 
 Edit or delete existing queries.
-![alt tag](https://goo.gl/photos/uVJGpkEbWynCmkKs7)
+![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-02-29-19-37-01.png)
 
-![alt tag](https://goo.gl/photos/uVJGpkEbWynCmkKs7)
+![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-02-29-19-36-30.png)
 
 Disable vibration.
-![alt tag](https://goo.gl/photos/j5FaVR5GB19yrtNQ6)
+![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-02-29-19-37-21.png)
 
 Clicking notification brings you a summary of what was found and what you had originally searched for in red.
-![alt tag](https://goo.gl/photos/8jpqjYJ9YwPdoFnSA)
+![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-02-29-19-45-03.png)
 
 Android Wear support
-![alt tag](https://goo.gl/photos/REcM35akvNJjrCHcA)
+![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/download_20160229_194600.png)
 
 Navigate to the deal upon clicking 'View Deal'.
-![alt tag](https://goo.gl/photos/3A93KvcdLgizhAbz9)
+![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-02-29-19-45-44.png)
 
 See clickable past found deals.
-![alt tag](https://goo.gl/photos/3A93KvcdLgizhAbz9)
+![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-02-29-19-47-14.png)
