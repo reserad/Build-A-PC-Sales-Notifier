@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Build A Pc Sales Notifier</string>
+    <string name="app_entries">Added Deals</string>
+    <string name="app_settings">Settings</string>
+    <string name="app_past">Past Deals</string>
+    <string name="app_deal">Deal Found!</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <style name="green_button" parent="@android:style/Widget.Button">
+        <item name="android:padding">10dp</item>
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:textSize">16dip</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/green_button</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="blue_button" parent="@android:style/Widget.Button">
+        <item name="android:padding">10dp</item>
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:textSize">16dip</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/blue_button</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+</resources>

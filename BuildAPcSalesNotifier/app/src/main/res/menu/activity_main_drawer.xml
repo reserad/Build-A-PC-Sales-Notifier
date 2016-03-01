@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Settings">
+        <menu>
+            <item
+                android:id="@+id/nav_deal_searches"
+                android:icon="@android:drawable/ic_input_add"
+                android:title="Added Deals" />
+            <item
+                android:id="@+id/nav_past_deals"
+                android:icon="@android:drawable/ic_menu_revert"
+                android:title="Past Deals" />
+            <item
+                android:id="@+id/nav_manage"
+                android:icon="@android:drawable/ic_menu_manage"
+                android:title="Settings" />
+        </menu>
+    </item>
+
+</menu>
