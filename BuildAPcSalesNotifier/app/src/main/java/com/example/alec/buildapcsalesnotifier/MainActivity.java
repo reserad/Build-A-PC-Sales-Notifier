@@ -1,7 +1,8 @@
 package com.example.alec.buildapcsalesnotifier;
 
-import android.app.ActivityManager;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,7 +32,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -45,8 +46,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (!isMyServiceRunning(RedditService.class))
-            startService(new Intent(getBaseContext(), RedditService.class));
+
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent alarmIntent = new Intent(MainActivity.this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, 0);
+        try
+        {
+            manager.cancel(pendingIntent);
+            startAlarmManager(pendingIntent);
+        }
+        catch(Exception e)
+        {
+            Toast.makeText(getApplicationContext(), "ERROR MESSAGE COMING- CHOO CHOO: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
 
         final Context context = this;
         refreshEntries(context);
@@ -127,15 +139,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private boolean isMyServiceRunning(Class<?> serviceClass)
+    private void startAlarmManager(PendingIntent pendingIntent)
     {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                60000, pendingIntent);
     }
 
     private void refreshEntries(final Context context)
