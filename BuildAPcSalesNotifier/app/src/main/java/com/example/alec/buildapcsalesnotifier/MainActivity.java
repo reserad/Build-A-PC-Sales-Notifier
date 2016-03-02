@@ -13,6 +13,7 @@ import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.text.method.DigitsKeyListener;
 import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -167,6 +168,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 nested_li.setOrientation(LinearLayout.HORIZONTAL);
                 nested_li.setLayoutParams(lp);
                 nested_li.setPadding(5, 5, 5, 5);
+                nested_li.setBaselineAligned(false);
+                nested_li.setGravity(Gravity.CENTER_VERTICAL);
 
                 final TextView query = new TextView(context);
                 query.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -181,7 +184,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 nested_li.addView(price);
 
                 Button remove = new Button(new ContextThemeWrapper(context,R.style.green_button),null,R.style.green_button);
-                remove.setText("Delete");
+                remove.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                remove.setText("DELETE");
                 remove.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
                 nested_li.addView(remove);
 
@@ -189,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 View spacerView = new View(this);
                 spacerView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
-                spacerView.setBackgroundColor(Color.DKGRAY);
+                spacerView.setBackgroundColor(Color.LTGRAY);
 
                 entryLayout.addView(spacerView);
                 remove.setOnClickListener(new Button.OnClickListener()

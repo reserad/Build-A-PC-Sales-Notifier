@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.os.StrictMode;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -105,9 +106,9 @@ public class AlarmReceiver extends BroadcastReceiver
         int i = 0;
         while (Title.charAt(i) != '$')
             i++;
-        i+=1;
+        i += 1;
         int j = i;
-        while (Character.isDigit(Title.charAt(j)) || Title.charAt(j) == ' ')
+        while (j < Title.length() && (Character.isDigit(Title.charAt(j)) || Title.charAt(j) == ' '))
             j++;
 
         String[] items = Title.substring(i, j).trim().split(" ", 2);
@@ -158,6 +159,7 @@ public class AlarmReceiver extends BroadcastReceiver
                         catch (Exception e)
                         {
                             e.printStackTrace();
+                            Log.e("ERROR", title);
                             break;
                         }
                         if (Integer.parseInt(pair.getValue().toString()) >= price)
