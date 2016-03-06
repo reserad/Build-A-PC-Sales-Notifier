@@ -21,20 +21,8 @@
         </activity>
         <activity
             android:name=".Notification"
-            android:label="@string/app_deal"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/app_deal">
         </activity>
-        <activity
-            android:name=".Settings"
-            android:label="@string/app_settings"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
-            android:name=".PastDeals"
-            android:label="@string/app_past"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
         <receiver android:name=".AlarmReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>

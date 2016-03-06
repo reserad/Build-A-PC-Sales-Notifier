@@ -11,7 +11,6 @@ import android.net.NetworkInfo;
 import android.os.StrictMode;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -139,7 +138,7 @@ public class AlarmReceiver extends BroadcastReceiver
         return false;
     }
 
-    private void searchForDeal(Iterator iterator, JSONArray jsonArray, TinyDB tinyDB) throws JSONException
+    private void searchForDeal(Iterator iterator, JSONArray jsonArray, TinyDB tinyDB)
     {
         while (iterator.hasNext())
         {
@@ -148,35 +147,32 @@ public class AlarmReceiver extends BroadcastReceiver
             {
                 for (int i = 0; i < jsonArray.length(); i++)
                 {
-                    String title = jsonArray.getJSONObject(i).getJSONObject("data").getString("title");
-                    String linkUrl = jsonArray.getJSONObject(i).getJSONObject("data").getString("permalink");
-                    if (findSearchTermsInTitle(title.toLowerCase(), pair.getKey().toString().toLowerCase()))
+                    try
                     {
-                        int price;
-                        try
+                        String title = jsonArray.getJSONObject(i).getJSONObject("data").getString("title");
+                        String linkUrl = jsonArray.getJSONObject(i).getJSONObject("data").getString("permalink");
+                        if (findSearchTermsInTitle(title.toLowerCase(), pair.getKey().toString().toLowerCase()))
                         {
-                            price = priceFound(title);
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                            Log.e("ERROR", title);
-                            break;
-                        }
-                        if (Integer.parseInt(pair.getValue().toString()) >= price)
-                        {
-                            if(!tinyDB.getBoolean(linkUrl))
+                            int price = priceFound(title);
+                            if (Integer.parseInt(pair.getValue().toString()) >= price)
                             {
-                                Intent intent = new Intent(context, Notification.class);
-                                intent.putExtra("dealQuery", pair.getKey().toString());
-                                intent.putExtra("dealTitle", title);
-                                intent.putExtra("dealPrice", price);
-                                intent.putExtra("dealUrl", linkUrl);
+                                if(!tinyDB.getBoolean(linkUrl))
+                                {
+                                    Intent intent = new Intent(context, Notification.class);
+                                    intent.putExtra("dealQuery", pair.getKey().toString());
+                                    intent.putExtra("dealTitle", title);
+                                    intent.putExtra("dealPrice", price);
+                                    intent.putExtra("dealUrl", linkUrl);
 
-                                sendNotification(tinyDB, pair, title, price, PendingIntent.getActivity(context, (int) Calendar.getInstance().getTimeInMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT));
-                                tinyDB.putBoolean(linkUrl, true);
+                                    sendNotification(tinyDB, pair, title, price, PendingIntent.getActivity(context, (int) Calendar.getInstance().getTimeInMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT));
+                                    tinyDB.putBoolean(linkUrl, true);
+                                }
                             }
                         }
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -194,7 +190,7 @@ public class AlarmReceiver extends BroadcastReceiver
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true)
                     .setContentText(title)
-                    .setLights(Color.BLUE, 5000, 5000)
+                    .setLights(Color.BLUE, 1000, 2000)
             .extend(
                 new NotificationCompat.WearableExtender().setHintShowBackgroundOnly(true))
                     .build();
@@ -208,7 +204,7 @@ public class AlarmReceiver extends BroadcastReceiver
                     .setVibrate(new long[]{1000, 1000, 1000})
                     .setAutoCancel(true)
                     .setContentText(title)
-                    .setLights(Color.BLUE, 5000, 5000)
+                    .setLights(Color.BLUE, 1000, 2000)
                     .extend(
                             new NotificationCompat.WearableExtender().setHintShowBackgroundOnly(true))
                     .build();
