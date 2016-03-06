@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.StrictMode;
@@ -42,7 +43,7 @@ public class AlarmReceiver extends BroadcastReceiver
         this.context = context;
         if (isNetworkAvailable())
         {
-            String url = "https://www.reddit.com/r/buildapcsales/search.json?q=&sort=new&restrict_sr=on";
+            String url = "http://gotshrekt.com/api/Redditapi";
             try
             {
                 JSONArray jsonArray = getJsonObject(url).getJSONObject("data").getJSONArray("children");
@@ -193,8 +194,9 @@ public class AlarmReceiver extends BroadcastReceiver
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true)
                     .setContentText(title)
-                    .extend(
-                            new NotificationCompat.WearableExtender().setHintShowBackgroundOnly(true))
+                    .setLights(Color.BLUE, 5000, 5000)
+            .extend(
+                new NotificationCompat.WearableExtender().setHintShowBackgroundOnly(true))
                     .build();
         }
         else
@@ -206,6 +208,7 @@ public class AlarmReceiver extends BroadcastReceiver
                     .setVibrate(new long[]{1000, 1000, 1000})
                     .setAutoCancel(true)
                     .setContentText(title)
+                    .setLights(Color.BLUE, 5000, 5000)
                     .extend(
                             new NotificationCompat.WearableExtender().setHintShowBackgroundOnly(true))
                     .build();
