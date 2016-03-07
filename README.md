@@ -3,13 +3,13 @@ An Android version of my Build a PC Sales Deal Hunter email service
 
 Add queries with multiple tags and corresponding prices.
 
-![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-02-29-19-37-49.png)
+![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-03-07-00-05-17.png)
 
 Edit or delete existing queries.
 
-![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-02-29-19-37-01.png)
+![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-03-07-00-14-31.png)
 
-![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-02-29-19-36-30.png)
+![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-03-07-00-05-31.png)
 
 Disable vibration.
 
