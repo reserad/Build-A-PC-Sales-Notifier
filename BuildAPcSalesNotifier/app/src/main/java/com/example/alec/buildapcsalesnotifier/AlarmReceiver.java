@@ -108,10 +108,10 @@ public class AlarmReceiver extends BroadcastReceiver
             i++;
         i += 1;
         int j = i;
-        while (j < Title.length() && (Character.isDigit(Title.charAt(j)) || Title.charAt(j) == ' '))
+        while (j < Title.length() && (Character.isDigit(Title.charAt(j)) || Title.charAt(j) == ' ' || Title.charAt(j) == ','))
             j++;
 
-        String[] items = Title.substring(i, j).trim().split(" ", 2);
+        String[] items = Title.substring(i, j).trim().replace(",","").split(" ", 2);
         if (items.length > 1)
             return Integer.parseInt(items[0].trim());
 
