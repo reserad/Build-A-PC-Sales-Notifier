@@ -17,16 +17,16 @@ Disable vibration.
 
 Clicking notification brings you a summary of what was found and what you had originally searched for in red.
 
-![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-02-29-19-45-03.png)
+![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/asdfas4324.png)
 
 Android Wear support.
 
-![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/download_20160229_194600.png)
+![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/download_20160310_194453.png)
 
 Navigate to the deal upon clicking 'View Deal'.
 
-![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-02-29-19-45-44.png)
+![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-03-10-19-45-44.png)
 
 See clickable past found deals.
 
-![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-02-29-19-47-14.png)
+![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-03-10-19-46-01.png)
