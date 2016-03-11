@@ -78,22 +78,24 @@ public class Notification extends ActionBarActivity
 
     public Bitmap getThumbnailFromURL(String url)
     {
+        Bitmap bitmap = null;
         try
         {
+            if (url.equals("nsfw"))
+                return getThumbnailFromURL("b.thumbs.redditmedia.com/uUaUv2ttf2MSfaGFPTu93ZLzNZ9hJcHYUeN6a9E0LyI.png");
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
             connection.setDoInput(true);
             connection.connect();
             InputStream input = connection.getInputStream();
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 1;
-            Bitmap bitmap = BitmapFactory.decodeStream(input, null, options);
-            return Bitmap.createScaledBitmap(bitmap, (int)Math.round(bitmap.getWidth() * 1.5), (int)Math.round(bitmap.getHeight() * 1.5), true);
+            bitmap = BitmapFactory.decodeStream(input, null, options);
         }
         catch (IOException e)
         {
             e.printStackTrace();
-            return getThumbnailFromURL("https://b.thumbs.redditmedia.com/uUaUv2ttf2MSfaGFPTu93ZLzNZ9hJcHYUeN6a9E0LyI.png");
         }
+        return Bitmap.createScaledBitmap(bitmap, (int)Math.round(bitmap.getWidth() * 1.5), (int)Math.round(bitmap.getHeight() * 1.5), true);
     }
 
     public void onBackPressed()
