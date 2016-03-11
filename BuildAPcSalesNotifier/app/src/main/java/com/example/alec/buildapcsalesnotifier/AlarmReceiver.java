@@ -112,10 +112,7 @@ public class AlarmReceiver extends BroadcastReceiver
             j++;
 
         String[] items = Title.substring(i, j).trim().replace(",","").split(" ", 2);
-        if (items.length > 1)
-            return Integer.parseInt(items[0].trim());
-
-        return Integer.parseInt(Title.substring(i, j).trim());
+        return Integer.parseInt(items[0].trim());
     }
 
     private static boolean findSearchTermsInTitle(String title, String searchTerm)
@@ -159,6 +156,7 @@ public class AlarmReceiver extends BroadcastReceiver
                                 if(!tinyDB.getBoolean(linkUrl))
                                 {
                                     Intent intent = new Intent(context, Notification.class);
+                                    intent.putExtra("Thumbnail",jsonArray.getJSONObject(i).getJSONObject("data").getString("thumbnail"));
                                     intent.putExtra("dealQuery", pair.getKey().toString());
                                     intent.putExtra("dealTitle", title);
                                     intent.putExtra("dealPrice", price);
@@ -185,7 +183,7 @@ public class AlarmReceiver extends BroadcastReceiver
         if (tinyDB.getBoolean("vibrate"))
         {
             builder = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.drawable.ic_menu_send)
+                    .setSmallIcon(R.mipmap.reddit)
                     .setContentTitle(pair.getKey().toString() + " for $" + price)
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true)
@@ -198,7 +196,7 @@ public class AlarmReceiver extends BroadcastReceiver
         else
         {
             builder = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.drawable.ic_menu_send)
+                    .setSmallIcon(R.mipmap.reddit)
                     .setContentTitle(pair.getKey().toString() + " for $" + price)
                     .setContentIntent(pendingIntent)
                     .setVibrate(new long[]{1000, 1000, 1000})

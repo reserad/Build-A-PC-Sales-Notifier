@@ -18,10 +18,12 @@ import java.util.Map;
 /**
  * Created by Alec Reser on 3/6/2016.
  */
-public class Fragment_Past extends Fragment {
+public class Fragment_Past extends Fragment
+{
     View fragment_past_view;
     public Fragment_Past(){}
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         fragment_past_view = inflater.inflate(R.layout.fragment_past, container, false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_past);
         refresh(getContext());
@@ -38,7 +40,8 @@ public class Fragment_Past extends Fragment {
         while (it.hasNext())
         {
             Map.Entry pair = (Map.Entry)it.next();
-            if (pair.getValue() instanceof Boolean == true && !pair.getKey().equals("vibrate")) {
+            if (pair.getValue() instanceof Boolean == true && !pair.getKey().equals("vibrate"))
+            {
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 LinearLayout nested_li = new LinearLayout(context);
                 nested_li.setOrientation(LinearLayout.HORIZONTAL);
@@ -68,7 +71,7 @@ public class Fragment_Past extends Fragment {
                 spacerView.setBackgroundColor(Color.DKGRAY);
                 entryLayout.addView(spacerView);
             }
-            it.remove(); // avoids a ConcurrentModificationException
+            it.remove();
         }
     }
 }

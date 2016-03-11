@@ -28,10 +28,11 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
-    public static void hideKeyboard(Activity activity) {
-        // Check if no view has focus:
+    public static void hideKeyboard(Activity activity)
+    {
         View view = activity.getCurrentFocus();
-        if (view != null) {
+        if (view != null)
+        {
             InputMethodManager inputManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
@@ -47,9 +48,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Class fragmentClass;
         Fragment fragment = null;
         fragmentClass = Fragment_Add.class;
-        try {
+        try
+        {
             fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
 
@@ -111,17 +115,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START))
             drawer.closeDrawer(GravityCompat.START);
-        else {
+        else
+        {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Quit")
                     .setMessage("Really quit?")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int id)
+                        {
                             finish();
                         }
                     })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                    .setNegativeButton("No", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int id)
+                        {
                             dialog.dismiss();
                         }
                     });
@@ -174,10 +183,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else
             fragmentClass = Fragment_Add.class;
 
-
-        try {
+        try
+        {
             fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
 

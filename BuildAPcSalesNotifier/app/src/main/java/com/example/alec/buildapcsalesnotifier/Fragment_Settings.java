@@ -14,15 +14,18 @@ import android.widget.CheckBox;
 public class Fragment_Settings extends Fragment
 {
     public Fragment_Settings(){}
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_settings);
         final TinyDB tinyDB = new TinyDB(view.getContext());
 
         final CheckBox vibrate = (CheckBox) view.findViewById(R.id.vibrate);
         vibrate.setChecked(tinyDB.getBoolean("vibrate"));
-        vibrate.setOnClickListener(new CheckBox.OnClickListener() {
-            public void onClick(View view) {
+        vibrate.setOnClickListener(new CheckBox.OnClickListener()
+        {
+            public void onClick(View view)
+            {
                 tinyDB.putBoolean("vibrate", vibrate.isChecked());
             }
         });
