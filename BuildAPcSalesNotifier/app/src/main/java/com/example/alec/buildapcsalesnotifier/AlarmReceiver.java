@@ -11,6 +11,7 @@ import android.net.NetworkInfo;
 import android.os.StrictMode;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +23,10 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -49,7 +53,8 @@ public class AlarmReceiver extends BroadcastReceiver
                 final TinyDB tinyDB = new TinyDB(context);
 
                 searchForDeal(tinyDB.getAll().entrySet().iterator(), jsonArray, tinyDB);
-            } catch (JSONException | IOException e)
+            }
+            catch (JSONException | IOException e)
             {
                 e.printStackTrace();
             }
@@ -58,6 +63,7 @@ public class AlarmReceiver extends BroadcastReceiver
 
     private boolean isNetworkAvailable()
     {
+        //Determines network availability
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
@@ -65,6 +71,7 @@ public class AlarmReceiver extends BroadcastReceiver
 
     private JSONObject getJsonObject(String sURL) throws IOException, JSONException
     {
+        //Returns json from a specified URL
         URL url = new URL(sURL);
         HttpURLConnection request = (HttpURLConnection) url.openConnection();
         request.setRequestMethod("GET");
@@ -88,21 +95,17 @@ public class AlarmReceiver extends BroadcastReceiver
 
     private static JSONObject readJsonFromUrl(String url) throws IOException, JSONException
     {
-        InputStream inputStream = new URL(url).openStream();
-        try
+        try (InputStream inputStream = new URL(url).openStream())
         {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
             String jsonText = readAll(bufferedReader);
             return new JSONObject(jsonText);
         }
-        finally
-        {
-            inputStream.close();
-        }
     }
 
     private int priceFound(String Title)
     {
+        //Attempts to parse price from post title
         int i = 0;
         while (Title.charAt(i) != '$')
             i++;
@@ -137,79 +140,115 @@ public class AlarmReceiver extends BroadcastReceiver
 
     private void searchForDeal(Iterator iterator, JSONArray jsonArray, TinyDB tinyDB)
     {
+        //Iterates through all user data looking for matches
+        ArrayList<AddedDealsModel> addedDealsModelArrayList = new ArrayList<>();
+
         while (iterator.hasNext())
         {
-            Map.Entry pair = (Map.Entry) iterator.next();
-            if (!(pair.getKey() instanceof Boolean))
+            Map.Entry pair = (Map.Entry)iterator.next();
+            AddedDealsModel addedDealsModel;
+            try
             {
-                for (int i = 0; i < jsonArray.length(); i++)
-                {
-                    try
-                    {
-                        String title = jsonArray.getJSONObject(i).getJSONObject("data").getString("title");
-                        String linkUrl = jsonArray.getJSONObject(i).getJSONObject("data").getString("permalink");
-                        if (findSearchTermsInTitle(title.toLowerCase(), pair.getKey().toString().toLowerCase()))
-                        {
-                            int price = priceFound(title);
-                            if (Integer.parseInt(pair.getValue().toString()) >= price)
-                            {
-                                if(!tinyDB.getBoolean(linkUrl))
-                                {
-                                    Intent intent = new Intent(context, Notification.class);
-                                    intent.putExtra("Thumbnail",jsonArray.getJSONObject(i).getJSONObject("data").getString("thumbnail"));
-                                    intent.putExtra("dealQuery", pair.getKey().toString());
-                                    intent.putExtra("dealTitle", title);
-                                    intent.putExtra("dealPrice", price);
-                                    intent.putExtra("dealUrl", linkUrl);
+                addedDealsModel = (AddedDealsModel) tinyDB.getObject(pair.getKey().toString(), AddedDealsModel.class);
+                addedDealsModelArrayList.add(addedDealsModel);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            iterator.remove(); // avoids a ConcurrentModificationException
+        }
 
-                                    sendNotification(tinyDB, pair, title, price, PendingIntent.getActivity(context, (int) Calendar.getInstance().getTimeInMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT));
-                                    tinyDB.putBoolean(linkUrl, true);
-                                }
+        Collections.sort(addedDealsModelArrayList, new Comparator<AddedDealsModel>()
+        {
+            @Override
+            public int compare(AddedDealsModel p1, AddedDealsModel p2)
+            {
+                return Long.compare(p1.Timestamp, p2.Timestamp); // Ascending
+            }
+        });
+
+        for (AddedDealsModel addedDealsModel: addedDealsModelArrayList)
+        {
+            for (int i = 0; i < jsonArray.length(); i++)
+            {
+                try
+                {
+                    String title = jsonArray.getJSONObject(i).getJSONObject("data").getString("title");
+                    String linkUrl = jsonArray.getJSONObject(i).getJSONObject("data").getString("permalink");
+                    if (findSearchTermsInTitle(title.toLowerCase(), addedDealsModel.Queries.toLowerCase()))
+                    {
+                        int price = priceFound(title);
+                        if (addedDealsModel.Price >= price)
+                        {
+                            try
+                            {
+                                tinyDB.getObject(linkUrl, PastDealsModel.class);
+                            }
+                            catch(Exception e)
+                            {
+                                //If not already alerted to user, send notification
+                                Intent intent = new Intent(context, Notification.class);
+                                intent.putExtra("Thumbnail",jsonArray.getJSONObject(i).getJSONObject("data").getString("thumbnail"));
+                                intent.putExtra("dealQuery", addedDealsModel.Queries);
+                                intent.putExtra("dealTitle", title);
+                                intent.putExtra("dealPrice", price);
+                                intent.putExtra("dealUrl", linkUrl);
+
+                                sendNotification(tinyDB, addedDealsModel.Queries, title, price, PendingIntent.getActivity(context, (int) Calendar.getInstance().getTimeInMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT));
+                                PastDealsModel pastDealsModel = new PastDealsModel(linkUrl, (int) Calendar.getInstance().getTimeInMillis(), addedDealsModel.Queries, price, jsonArray.getJSONObject(i).getJSONObject("data").getString("thumbnail"));
+                                tinyDB.putObject(linkUrl, pastDealsModel);
                             }
                         }
                     }
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(context,e.getMessage(), Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
                 }
             }
         }
     }
 
-    private void sendNotification(TinyDB tinyDB, Map.Entry pair, String title, int price, PendingIntent pendingIntent)
+    private void sendNotification(TinyDB tinyDB, String query, String title, int price, PendingIntent pendingIntent)
     {
-        android.app.Notification builder;
-        if (tinyDB.getBoolean("vibrate"))
+        //Sends notification to user with a color variable and vibration determined by user settings
+        int color = getNotificationColor(tinyDB);
+        android.app.Notification builder = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.mipmap.reddit)
+                .setContentTitle(query + " for $" + price)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .setContentText(title)
+                .setLights(color, 1000, 2000)
+                .extend(new NotificationCompat.WearableExtender().setHintShowBackgroundOnly(true))
+                .build();
+
+        if (!tinyDB.getBoolean("vibrate"))
         {
-            builder = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.mipmap.reddit)
-                    .setContentTitle(pair.getKey().toString() + " for $" + price)
-                    .setContentIntent(pendingIntent)
-                    .setAutoCancel(true)
-                    .setContentText(title)
-                    .setLights(Color.BLUE, 1000, 2000)
-            .extend(
-                new NotificationCompat.WearableExtender().setHintShowBackgroundOnly(true))
-                    .build();
-        }
-        else
-        {
-            builder = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.mipmap.reddit)
-                    .setContentTitle(pair.getKey().toString() + " for $" + price)
-                    .setContentIntent(pendingIntent)
-                    .setVibrate(new long[]{1000, 1000, 1000})
-                    .setAutoCancel(true)
-                    .setContentText(title)
-                    .setLights(Color.BLUE, 1000, 2000)
-                    .extend(
-                            new NotificationCompat.WearableExtender().setHintShowBackgroundOnly(true))
-                    .build();
             Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
             v.vibrate(1000);
         }
+
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify((int) Calendar.getInstance().getTimeInMillis(), builder);
+    }
+
+    private int getNotificationColor(TinyDB tinyDB)
+    {
+        //Returns notification color defined by settings
+        int color;
+        if (tinyDB.getBoolean("Red"))
+            color = Color.RED;
+        else if (tinyDB.getBoolean("Green"))
+            color = Color.GREEN;
+        else if (tinyDB.getBoolean("Magenta"))
+            color = Color.MAGENTA;
+        else if (tinyDB.getBoolean("Yellow"))
+            color = Color.YELLOW;
+        else
+            color = Color.BLUE;
+        return color;
     }
 }

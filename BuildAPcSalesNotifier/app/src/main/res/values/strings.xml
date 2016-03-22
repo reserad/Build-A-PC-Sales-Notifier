@@ -30,4 +30,11 @@
         <item name="android:clickable">true</item>
     </style>
 
+    <string-array name="colors_array">
+        <item>Blue</item>
+        <item>Red</item>
+        <item>Green</item>
+        <item>Yellow</item>
+        <item>Magenta</item>
+    </string-array>
 </resources>

@@ -1,13 +1,15 @@
 package com.example.alec.buildapcsalesnotifier;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -28,17 +30,18 @@ public class Notification extends ActionBarActivity
         getSupportActionBar().setTitle(R.string.app_deal);
         setContentView(R.layout.notification);
 
-        Bitmap thumbnail = getThumbnailFromURL(getIntent().getStringExtra("Thumbnail").toString());
-        Log.d("Width, Height: ", thumbnail.getWidth() + ", " + thumbnail.getHeight());
-
-        ImageView imageView = (ImageView) findViewById(R.id.thumbnail);
-        imageView.setImageBitmap(thumbnail);
+        if (isNetworkAvailable(getApplicationContext()))
+        {
+            Bitmap thumbnail = getThumbnailFromURL(getIntent().getStringExtra("Thumbnail"));
+            ImageView imageView = (ImageView) findViewById(R.id.thumbnail);
+            imageView.setImageBitmap(thumbnail);
+        }
 
         final String url = getIntent().getStringExtra("dealUrl");
         String query = getIntent().getStringExtra("dealQuery");
 
         TextView title = (TextView) findViewById(R.id.notificationTitle);
-        String dealTitle = getIntent().getStringExtra("dealTitle").toString();
+        String dealTitle = getIntent().getStringExtra("dealTitle");
 
         String[] queries = query.split(" ");
         for (String q:queries)
@@ -49,7 +52,7 @@ public class Notification extends ActionBarActivity
         price.setText(Html.fromHtml("<b><font color=blue>$" + getIntent().getIntExtra("dealPrice", 0) + "</font></b>"));
 
         Button viewDeal = (Button) findViewById(R.id.btnNavigate);
-        Button shareDeal = (Button) findViewById(R.id.btnShare);;
+        Button shareDeal = (Button) findViewById(R.id.btnShare);
 
         viewDeal.setOnClickListener(new Button.OnClickListener()
         {
@@ -73,12 +76,18 @@ public class Notification extends ActionBarActivity
                         startActivity(intent);
             }
         });
-
     }
 
-    public Bitmap getThumbnailFromURL(String url)
+    public static boolean isNetworkAvailable(Context context)
     {
-        Bitmap bitmap = null;
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public static Bitmap getThumbnailFromURL(String url)
+    {
+        Bitmap bitmap;
         try
         {
             if (url.equals("nsfw"))
@@ -90,12 +99,14 @@ public class Notification extends ActionBarActivity
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 1;
             bitmap = BitmapFactory.decodeStream(input, null, options);
+            connection.disconnect();
+            return Bitmap.createScaledBitmap(bitmap, (int)Math.round(bitmap.getWidth() * 1.5), (int)Math.round(bitmap.getHeight() * 1.5), true);
         }
         catch (IOException e)
         {
             e.printStackTrace();
         }
-        return Bitmap.createScaledBitmap(bitmap, (int)Math.round(bitmap.getWidth() * 1.5), (int)Math.round(bitmap.getHeight() * 1.5), true);
+        return Bitmap.createBitmap(0,0, Bitmap.Config.ALPHA_8);
     }
 
     public void onBackPressed()
