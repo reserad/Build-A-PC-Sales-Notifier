@@ -152,10 +152,7 @@ public class AlarmReceiver extends BroadcastReceiver
                 addedDealsModel = (AddedDealsModel) tinyDB.getObject(pair.getKey().toString(), AddedDealsModel.class);
                 addedDealsModelArrayList.add(addedDealsModel);
             }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+            catch (Exception e) { }
             iterator.remove(); // avoids a ConcurrentModificationException
         }
 
@@ -202,11 +199,7 @@ public class AlarmReceiver extends BroadcastReceiver
                         }
                     }
                 }
-                catch (Exception e)
-                {
-                    Toast.makeText(context,e.getMessage(), Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
+                catch (Exception e) { }
             }
         }
     }

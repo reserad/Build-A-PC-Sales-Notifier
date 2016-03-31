@@ -121,10 +121,7 @@ public class Fragment_Add extends Fragment {
                     addedDealsModelArrayList.add(addedDealsModel);
                 }
             }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+            catch (Exception e) { }
             it.remove(); // avoids a ConcurrentModificationException
         }
 

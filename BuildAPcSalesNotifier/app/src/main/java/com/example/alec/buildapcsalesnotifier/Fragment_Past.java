@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,10 +63,7 @@ public class Fragment_Past extends Fragment
                     pastDealsModelArrayList.add(pastDealsModel);
                 }
             }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+            catch (Exception e) { }
             it.remove(); // avoids a ConcurrentModificationException
         }
 
@@ -103,16 +101,15 @@ public class Fragment_Past extends Fragment
             url.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
             nested_li.addView(url);
 
-            url.setOnClickListener(new TextView.OnClickListener()
-            {
+            url.setOnClickListener(new TextView.OnClickListener() {
                 @Override
-                public void onClick(View view)
-                {
+                public void onClick(View view) {
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse("http://www.reddit.com" + pastDealsModel.Url));
                     startActivity(i);
                 }
             });
+            nested_li.setGravity(Gravity.CENTER_VERTICAL);
             entryLayout.addView(nested_li);
 
             View spacerView = new View(context);

@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -90,8 +91,10 @@ public class Notification extends ActionBarActivity
         Bitmap bitmap;
         try
         {
-            if (url.equals("nsfw"))
-                return getThumbnailFromURL("b.thumbs.redditmedia.com/uUaUv2ttf2MSfaGFPTu93ZLzNZ9hJcHYUeN6a9E0LyI.png");
+            if (url.contains("nsfw"))
+                url = "http://b.thumbs.redditmedia.com/uUaUv2ttf2MSfaGFPTu93ZLzNZ9hJcHYUeN6a9E0LyI.png";
+            if (!url.contains("http://"))
+                url = "http://" + url;
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
             connection.setDoInput(true);
             connection.connect();
@@ -102,11 +105,8 @@ public class Notification extends ActionBarActivity
             connection.disconnect();
             return Bitmap.createScaledBitmap(bitmap, (int)Math.round(bitmap.getWidth() * 1.5), (int)Math.round(bitmap.getHeight() * 1.5), true);
         }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return Bitmap.createBitmap(0,0, Bitmap.Config.ALPHA_8);
+        catch (IOException e) { }
+        return Bitmap.createBitmap(1,1, Bitmap.Config.ALPHA_8);
     }
 
     public void onBackPressed()
