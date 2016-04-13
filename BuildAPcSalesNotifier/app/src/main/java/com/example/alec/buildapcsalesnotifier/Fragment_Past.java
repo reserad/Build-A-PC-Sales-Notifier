@@ -9,10 +9,12 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -47,7 +49,6 @@ public class Fragment_Past extends Fragment
         entryLayout.removeAllViewsInLayout();
         final TinyDB tinydb = new TinyDB(context);
 
-
         Iterator it = tinydb.getAll().entrySet().iterator();
         ArrayList<PastDealsModel> pastDealsModelArrayList = new ArrayList<>();
 
@@ -67,22 +68,55 @@ public class Fragment_Past extends Fragment
             it.remove(); // avoids a ConcurrentModificationException
         }
 
-        Collections.sort(pastDealsModelArrayList, new Comparator<PastDealsModel>()
-        {
+        Collections.sort(pastDealsModelArrayList, new Comparator<PastDealsModel>() {
             @Override
-            public int compare(PastDealsModel p1, PastDealsModel p2)
-            {
-                return Long.compare(p1.Timestamp, p2.Timestamp); // Ascending
+            public int compare(PastDealsModel p1, PastDealsModel p2) {
+                return Long.compare(p2.Timestamp, p1.Timestamp); // Descending
             }
         });
+        int terminationCounter = 0;
+        int terminationThreshold = 10;
+        generateItems(pastDealsModelArrayList,context,entryLayout, terminationCounter, terminationThreshold);
 
+    }
+
+    private void generateItems(final ArrayList<PastDealsModel> pastDealsModelArrayList, final Context context, final LinearLayout entryLayout, final int terminationCounter, final int terminationThreshold)
+    {
+        int _terminationCounter = terminationCounter;
+        int counter = 0;
         for (final PastDealsModel pastDealsModel: pastDealsModelArrayList)
         {
+            if (counter < terminationCounter)
+            {
+                counter++;
+                continue;
+            }
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 2);
-            LinearLayout nested_li = new LinearLayout(context);
+            final LinearLayout nested_li = new LinearLayout(context);
             nested_li.setOrientation(LinearLayout.HORIZONTAL);
             nested_li.setLayoutParams(lp);
             nested_li.setPadding(5, 5, 5, 5);
+
+            if (_terminationCounter >= terminationThreshold)
+            {
+                final Button showMore = new Button(new ContextThemeWrapper(context,R.style.green_button),null,R.style.green_button);
+                showMore.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                showMore.setText("Show more");
+                showMore.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 2f));
+
+                showMore.setOnClickListener(new Button.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        nested_li.removeView(showMore);
+                        generateItems(pastDealsModelArrayList, context, entryLayout, terminationThreshold, terminationThreshold+5);
+                    }
+                });
+
+                nested_li.addView(showMore);
+                nested_li.setGravity(Gravity.CENTER_VERTICAL);
+                entryLayout.addView(nested_li);
+                break;
+            }
 
             ImageView imageView = new ImageView(context);
             imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
@@ -116,6 +150,8 @@ public class Fragment_Past extends Fragment
             spacerView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
             spacerView.setBackgroundColor(Color.LTGRAY);
             entryLayout.addView(spacerView);
+            counter++;
+            _terminationCounter++;
         }
     }
 }

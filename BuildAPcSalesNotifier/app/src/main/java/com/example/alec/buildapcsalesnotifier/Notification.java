@@ -103,7 +103,10 @@ public class Notification extends ActionBarActivity
             options.inSampleSize = 1;
             bitmap = BitmapFactory.decodeStream(input, null, options);
             connection.disconnect();
-            return Bitmap.createScaledBitmap(bitmap, (int)Math.round(bitmap.getWidth() * 1.5), (int)Math.round(bitmap.getHeight() * 1.5), true);
+            if (bitmap != null)
+                return Bitmap.createScaledBitmap(bitmap, (int)Math.round(bitmap.getWidth() * 1.5), (int)Math.round(bitmap.getHeight() * 1.5), true);
+            else
+                return Bitmap.createBitmap(1,1, Bitmap.Config.ALPHA_8);
         }
         catch (IOException e) { }
         return Bitmap.createBitmap(1,1, Bitmap.Config.ALPHA_8);
