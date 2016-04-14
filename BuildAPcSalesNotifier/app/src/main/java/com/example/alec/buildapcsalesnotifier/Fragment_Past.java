@@ -77,7 +77,6 @@ public class Fragment_Past extends Fragment
         int terminationCounter = 0;
         int terminationThreshold = 10;
         generateItems(pastDealsModelArrayList,context,entryLayout, terminationCounter, terminationThreshold);
-
     }
 
     private void generateItems(final ArrayList<PastDealsModel> pastDealsModelArrayList, final Context context, final LinearLayout entryLayout, final int terminationCounter, final int terminationThreshold)

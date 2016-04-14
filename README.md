@@ -11,9 +11,9 @@ Edit or delete existing queries.
 
 ![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-03-07-00-05-31.png)
 
-Disable vibration.
+Disable vibration and change notification colors.
 
-![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-02-29-19-37-21.png)
+![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-04-14-00-35-59.png)
 
 Clicking notification brings you a summary of what was found and what you had originally searched for in red.
 
@@ -29,4 +29,4 @@ Navigate to the deal upon clicking 'View Deal'.
 
 See clickable past found deals.
 
-![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-03-10-19-46-01.png)
+![alt tag](http://i982.photobucket.com/albums/ae305/newbkilla/Screenshot_2016-04-14-00-35-45.png)

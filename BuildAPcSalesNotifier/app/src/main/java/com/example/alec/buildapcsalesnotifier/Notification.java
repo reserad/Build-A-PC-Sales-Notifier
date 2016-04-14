@@ -8,9 +8,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -33,6 +33,9 @@ public class Notification extends ActionBarActivity
 
         if (isNetworkAvailable(getApplicationContext()))
         {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
             Bitmap thumbnail = getThumbnailFromURL(getIntent().getStringExtra("Thumbnail"));
             ImageView imageView = (ImageView) findViewById(R.id.thumbnail);
             imageView.setImageBitmap(thumbnail);
